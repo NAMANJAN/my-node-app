@@ -1,0 +1,14 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16  # Update as needed
+    commands:
+      - npm install
+  build:
+    commands:
+      - npm run build  # Ensure this script exists in package.json
+artifacts:
+  files:
+    - '**/*'
