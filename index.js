@@ -1,4 +1,5 @@
 const express = require("express");
+const awsServerlessExpress = require("aws-serverless-express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
@@ -13,11 +14,12 @@ app.use(morgan("dev")); // Log requests
 
 // Routes
 app.get("/", (req, res) => {
-  res.send("Hello, Node.js with easy libraries is working!");
+  res.send("Hello, Node.js with AWS Lambda!");
 });
 
-// Start Server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Export Lambda Handler
+const server = awsServerlessExpress.createServer(app);
+exports.handler = (event, context) => {
+  awsServerlessExpress.proxy(server, event, context);
+};
+
