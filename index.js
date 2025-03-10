@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+ HEAD
 const express = require("express");
 const awsServerlessExpress = require("aws-serverless-express");
 const cors = require("cors");
@@ -24,7 +24,7 @@ exports.handler = (event, context) => {
   awsServerlessExpress.proxy(server, event, context);
 };
 
-=======
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -45,4 +45,4 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
->>>>>>> 9d55bcb (Fix package-lock.json issue)
+9d55bcb (Fix package-lock.json issue)
