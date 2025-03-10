@@ -1,0 +1,20 @@
+name: Deploy to New Relic
+
+on: push  # Runs on every push
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Deploy to New Relic
+        run: |
+          curl -X POST "https://api.newrelic.com/v2/applications.json" \
+          -H "Api-Key: ${{ secrets.NEW_RELIC_API_KEY }}"
