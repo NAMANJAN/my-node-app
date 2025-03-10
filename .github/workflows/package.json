@@ -1,0 +1,4 @@
+git init  # Initialize git if not already done
+git add .  # Stage all changes
+git commit -m "Adding New Relic workflow"  # Commit changes
+git push origin main  # Push to the main branch
