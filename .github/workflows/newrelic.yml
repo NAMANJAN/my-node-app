@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:  # Enables manual triggering
+  workflow_dispatch:  # Allows manual triggering from GitHub Actions UI or CLI
 
 jobs:
   deploy:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js (if required)
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -21,7 +21,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Deploy Application (Example)
+      - name: Deploy Application
         run: echo "Deploying application..." 
 
       - name: Send Deployment Marker to New Relic
