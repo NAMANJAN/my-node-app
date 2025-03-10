@@ -1,23 +1,42 @@
-name: Export workflow to New Relic
+name: Deploy and Monitor with New Relic
 
 on:
-  workflow_run:
-    workflows:
-      # The name of the workflow(s) that triggers the export
-      - "Build"
-    types: [completed]
+  push:
+    branches:
+      - main
 
 jobs:
-  otel-export-newrelic:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Export workflow to New Relic
-        uses: corentinmusard/otel-cicd-action@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js (if required)
+        uses: actions/setup-node@v3
         with:
-          otlpEndpoint: grpc://otlp.eu01.nr-data.net
-          # Example value for NEWRELIC_OTLP_HEADERS:
-          # api-key=YOUR_NEWRELIC_API_KEY
-          otlpHeaders: ${{ secrets.NEWRELIC_OTLP_HEADERS }}
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          runId: ${{ github.event.workflow_run.id }}# New Relic Workflow
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Deploy Application (Example)
+        run: echo "Deploying application..." 
+
+      - name: Send Deployment Marker to New Relic
+        env:
+          NEW_RELIC_API_KEY: ${{ secrets.NEW_RELIC_API_KEY }}
+          NEW_RELIC_ACCOUNT_ID: ${{ secrets.NEW_RELIC_ACCOUNT_ID }}
+        run: |
+          curl -X POST "https://api.newrelic.com/v2/applications/YOUR_APP_ID/deployments.json" \
+          -H "Api-Key:${NEW_RELIC_API_KEY}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "deployment": {
+              "revision": "v1.0",
+              "changelog": "Deployed via GitHub Actions",
+              "description": "Automated deployment",
+              "user": "GitHub Actions"
+            }
+          }'
+
