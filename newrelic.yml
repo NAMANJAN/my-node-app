@@ -1,0 +1,42 @@
+name: Deploy and Monitor with New Relic
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js (if required)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Deploy Application (Example)
+        run: echo "Deploying application..." 
+
+      - name: Send Deployment Marker to New Relic
+        env:
+          NEW_RELIC_API_KEY: ${{ secrets.NEW_RELIC_API_KEY }}
+          NEW_RELIC_ACCOUNT_ID: ${{ secrets.NEW_RELIC_ACCOUNT_ID }}
+        run: |
+          curl -X POST "https://api.newrelic.com/v2/applications/YOUR_APP_ID/deployments.json" \
+          -H "Api-Key:${NEW_RELIC_API_KEY}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "deployment": {
+              "revision": "v1.0",
+              "changelog": "Deployed via GitHub Actions",
+              "description": "Automated deployment",
+              "user": "GitHub Actions"
+            }
+          }'
+
