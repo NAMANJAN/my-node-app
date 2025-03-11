@@ -1,0 +1,31 @@
+name: New Relic API Test
+
+on: [push]
+
+jobs:
+  newrelic-api-call:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Debug API Key
+        run: echo "API Key Length: ${#NEW_RELIC_API_KEY}"
+        env:
+          NEW_RELIC_API_KEY: ${{ secrets.NEW_RELIC_API_KEY }}
+
+      - name: Call New Relic API
+        run: |
+          RESPONSE=$(curl -X GET "https://api.newrelic.com/v2/applications.json" \
+               -H "Api-Key: $NEW_RELIC_API_KEY")
+          echo "New Relic API Response: $RESPONSE"
+
+      - name: Send Logs to New Relic
+        run: |
+          curl -X POST "https://log-api.newrelic.com/log/v1" \
+               -H "Content-Type: application/json" \
+               -H "Api-Key: $NEW_RELIC_LICENSE_KEY" \
+               --data '{"message": "GitHub Action Workflow Log", "attributes": {"workflow": "New Relic API Test"}}'
+        env:
+          NEW_RELIC_LICENSE_KEY: ${{ secrets.NEW_RELIC_LICENSE_KEY }}
