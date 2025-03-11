@@ -32,4 +32,3 @@ jobs:
                --data '{"message": "GitHub Action Workflow Log", "attributes": {"workflow": "New Relic API Test"}}'
         env:
           NEW_RELIC_LICENSE_KEY: ${{ secrets.NEW_RELIC_LICENSE_KEY }}
-
