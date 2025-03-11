@@ -1,0 +1,23 @@
+name: New Relic API Test
+
+on: [push]
+
+jobs:
+  newrelic-api-call:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Debug API Key
+        run: echo "API Key Length: ${#NEW_RELIC_API_KEY}"
+        env:
+          NEW_RELIC_API_KEY: ${{ secrets.NEW_RELIC_API_KEY }}
+
+      - name: Call New Relic API
+        run: |
+          curl -X GET "https://api.newrelic.com/v2/applications.json" \
+               -H "Api-Key: $NEW_RELIC_API_KEY"
+        env:
+          NEW_RELIC_API_KEY: ${{ secrets.NEW_RELIC_API_KEY }}
